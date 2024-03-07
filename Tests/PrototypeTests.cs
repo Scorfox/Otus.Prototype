@@ -1,4 +1,4 @@
-using MyNamespace;
+using NUnit.Framework;
 using Prototype.Models;
 
 namespace Tests;
@@ -9,7 +9,7 @@ public class Tests
     public void Test_PersonDeepCopying_ReturnsSuccess()
     {
         var initialPerson = GlobalUsings.GeneratePerson();
-        var copiedPerson = initialPerson.Clone();
+        var copiedPerson = initialPerson.MyClone();
 
         GlobalUsings.ChangePerson(copiedPerson);
 
@@ -19,23 +19,23 @@ public class Tests
     [Test]
     public void Test_EmployeeDeepCopying_ReturnsSuccess()
     {
-        var initialEmployee = new Employee("lastName", "firstName", "middleName", 180);
-        var copiedEmployee = initialEmployee.Clone();
+        var initialEmployee = GlobalUsings.GenerateEmployee();
+        var copiedEmployee = initialEmployee.MyClone();
         
-        GlobalUsings.ChangePerson(copiedEmployee);
+        GlobalUsings.ChangeEmployee(copiedEmployee);
         
-        AssertInitPersonNotEqualCopiedPerson(initialEmployee, copiedEmployee);
+        AssertInitEmployeeNotEqualCopiedEmployee(initialEmployee, copiedEmployee);
     }
     
     [Test]
     public void Test_ManagerDeepCopying_ReturnsSuccess()
     {
-        var initialManager = new Manager("lastName", "firstName", "middleName", 180);
-        var copiedManager = initialManager.Clone();
+        var initialManager = GlobalUsings.GenerateManager();
+        var copiedManager = initialManager.MyClone();
         
-        GlobalUsings.ChangePerson(copiedManager);
+        GlobalUsings.ChangeManager(copiedManager);
         
-        AssertInitPersonNotEqualCopiedPerson(initialManager, copiedManager);
+        AssertInitManagerNotEqualCopiedManager(initialManager, copiedManager);
     }
 
     private static void AssertInitPersonNotEqualCopiedPerson(Person person, Person copiedPerson)
@@ -45,7 +45,24 @@ public class Tests
             Assert.That(copiedPerson.LastName, !Is.EqualTo(person.LastName));
             Assert.That(copiedPerson.FirstName, !Is.EqualTo(person.FirstName));
             Assert.That(copiedPerson.MiddleName, !Is.EqualTo(person.MiddleName));
-            Assert.That(copiedPerson.Growth, !Is.EqualTo(person.Growth));
+        });
+    }
+    
+    private static void AssertInitEmployeeNotEqualCopiedEmployee(Employee employee, Employee copiedEmployee)
+    {
+        AssertInitPersonNotEqualCopiedPerson(employee, copiedEmployee);
+        Assert.Multiple(() =>
+        {
+            Assert.That(employee.DepartmentName, !Is.EqualTo(copiedEmployee.DepartmentName));
+        });
+    }
+    
+    private static void AssertInitManagerNotEqualCopiedManager(Manager manager, Manager copiedManager)
+    {
+        AssertInitEmployeeNotEqualCopiedEmployee(manager, copiedManager);
+        Assert.Multiple(() =>
+        {
+            Assert.That(manager.CashBonus, !Is.EqualTo(copiedManager.CashBonus));
         });
     }
 }

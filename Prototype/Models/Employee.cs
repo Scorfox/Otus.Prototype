@@ -1,14 +1,22 @@
-﻿namespace Prototype.Models;
+﻿using Prototype.Interfaces;
+
+namespace Prototype.Models;
 
 /// <summary>
 /// Работник
 /// </summary>
-public class Employee : Person, ICloneable
+public class Employee : Person, IMyCloneable<Employee>
 {
-    public Employee(string lastName, string firstName, string middleName, int growth) 
-        : base(lastName, firstName, middleName, growth)
-    {
-    }
+    /// <summary>
+    /// Наименование отдела
+    /// </summary>
+    public string DepartmentName { get; set; }
     
-    object ICloneable.Clone() => Clone();
+    public Employee(string lastName, string firstName, string middleName, string departmentName) 
+        : base(lastName, firstName, middleName)
+    {
+        DepartmentName = departmentName;
+    }
+
+    public override Employee MyClone() => new(LastName, FirstName, MiddleName, DepartmentName);
 }

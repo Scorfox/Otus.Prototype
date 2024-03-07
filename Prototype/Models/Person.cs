@@ -19,20 +19,15 @@ public class Person : IMyCloneable<Person>, ICloneable
     /// Отчество
     /// </summary>
     public string MiddleName { get; set; }
-    /// <summary>
-    /// Рост в см
-    /// </summary>
-    public int Growth { get; set; }
 
-    public Person(string lastName, string firstName, string middleName, int growth)
+    public Person(string lastName, string firstName, string middleName)
     {
         LastName = lastName;
         FirstName = firstName;
         MiddleName = middleName;
-        Growth = growth;
     }
 
-    public virtual Person Clone() => new(LastName, FirstName, MiddleName, Growth);
+    public virtual Person MyClone() => new(LastName, FirstName, MiddleName);
     
-    object ICloneable.Clone() => Clone();
+    public object Clone() => MyClone();
 }

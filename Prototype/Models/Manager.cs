@@ -1,14 +1,22 @@
-﻿namespace Prototype.Models;
+﻿using Prototype.Interfaces;
+
+namespace Prototype.Models;
 
 /// <summary>
 /// Менеджер
 /// </summary>
-public class Manager : Employee, ICloneable
+public class Manager : Employee, IMyCloneable<Manager>
 {
-    public Manager(string lastName, string firstName, string middleName, int growth) 
-        : base(lastName, firstName, middleName, growth)
+    /// <summary>
+    /// Премия
+    /// </summary>
+    public double CashBonus { get; set; }
+    
+    public Manager(string lastName, string firstName, string middleName, string departmentName, double cashBonus) 
+        : base(lastName, firstName, middleName, departmentName)
     {
+        CashBonus = cashBonus;
     }
     
-    object ICloneable.Clone() => Clone();
+    public override Manager MyClone() => new(LastName, FirstName, MiddleName, DepartmentName, CashBonus);
 }
